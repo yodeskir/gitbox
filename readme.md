@@ -1,5 +1,7 @@
-Service to keep syncronized a git repo
+## Service to keep syncronized a git repo
+
 Just made your changes in loca and the service will:
+
 	1- detect any change
 	2- fetch from origin
 	3- commit & push
