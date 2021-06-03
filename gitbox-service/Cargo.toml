@@ -1,0 +1,21 @@
+[package]
+name = "gitbox-service"
+version = "0.1.0"
+authors = ["yodeski <yodeskir@gmail.com>"]
+edition = "2018"
+
+[target.'cfg(windows)'.build-dependencies]
+winres = "0.1"
+
+[dependencies]
+notify = "4.0.17"
+asyncgit = "0.16.1"
+git2 = "0.13.20"
+pathdiff = "0.2.0"
+confy = "0.4.0"
+whoami = "1.1.2"
+serde = "^1.0"
+serde_derive = "^1.0"
+daemon = "0.0.8"
+log = "0.4.0"
+
