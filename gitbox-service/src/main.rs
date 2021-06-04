@@ -6,6 +6,7 @@ extern crate serde_derive;
 mod commit;
 mod gitinit;
 
+use crate::commit::do_merge;
 use crate::commit::add_and_commit;
 use crate::commit::do_fetch;
 use crate::commit::push;
@@ -77,9 +78,12 @@ fn start() -> () {
 	env::set_var("__GITHUB_USERNAME", username);
 	env::set_var("__GITHUB_PASSWORD", password);
 
+	fetch(&local, &branch_name);
+
 	let (tx, rx) = channel();
 	let mut watcher = watcher(tx, Duration::from_secs(10)).unwrap();
 	watcher.watch(&local, RecursiveMode::Recursive).unwrap();
+
 	loop {
 		match rx.recv() {
 			Ok(event) => match &event {
@@ -117,7 +121,8 @@ fn fetch(dir: &str, branch: &str) {
 	let mut remote = repo
 		.find_remote(remote_name)
 		.expect("Failed to find remote");
-	let _ = do_fetch(&repo, &[remote_branch], &mut remote);
+	let fetch_commit = do_fetch(&repo, &[remote_branch], &mut remote).expect("Fail to fetch from Origin");
+	do_merge(&repo, &branch, fetch_commit).expect("Failed to merge");
 }
 
 fn commit_and_push(repo_url: &str, branch: &str, src: PathBuf, dir: &str, message: String) -> () {
